@@ -52,9 +52,10 @@ class BunchElement(models.Model):
 
 
 class Bunch(models.Model):
+    title = models.CharField("Название букета", max_length=200)
     price = models.FloatField("Цена букета")
     image = models.ImageField("Изображение букета", null=True, blank=True)
-    caption = models.TextField("Смысл букета", null=True, blank=True)
+    caption = models.TextField("Описание букета", null=True, blank=True)
     motive = models.ManyToManyField(
         Motive,
         related_name="bunch",
