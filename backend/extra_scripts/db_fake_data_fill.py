@@ -4,7 +4,7 @@ from datacenter.models import (
     Bunch,
     BunchElement,
     Client,
-    EstimatedCost,
+    Budget,
     Motive,
     Order,
 )
@@ -44,7 +44,6 @@ def create_occasions():
         "23 февраля",
         "14 февраля",
         "Без повода",
-        "Другой повод",
     ]
 
     for occasion in occasions:
@@ -71,18 +70,19 @@ def create_elements_bouquet():
 
 
 # Создание Рссчетной суммы
-def create_estimated_cost():
-    estimated_cost = {
+def create_budget():
+    budgets = {
         0: {"title": "До 1000", "price": 1000},
         1: {"title": "До 2500 ", "price": 2500},
         2: {"title": "До 5000", "price": 5000},
         3: {"title": "Свыше 5000", "price": 10000},
+        4: {"title": "Не важно", "price": 1000000},
     }
 
-    for cost in estimated_cost.values():
+    for cost in budgets.values():
         title = cost["title"]
         value = cost["price"]
-        EstimatedCost.objects.create(title=title, value=value)
+        Budget.objects.create(title=title, value=value)
 
 
 # Создание Букетов
@@ -190,6 +190,6 @@ def main():
     create_clients()
     create_occasions()
     create_elements_bouquet()
-    create_estimated_cost()
+    create_budget()
     create_bouquets()
     create_orders()

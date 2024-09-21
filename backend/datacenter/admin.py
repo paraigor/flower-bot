@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Bunch, BunchElement, Client, EstimatedCost, Motive, Order
+from .models import Budget, Bunch, BunchElement, Client, Motive, Order
 
 
 class BunchElementInline(admin.TabularInline):
@@ -14,7 +14,7 @@ class BunchAdmin(admin.ModelAdmin):
 
 
 admin.site.register(BunchElement)
-admin.site.register(EstimatedCost)
+admin.site.register(Budget)
 admin.site.register(Client)
 admin.site.register(Motive)
 admin.site.register(Order)

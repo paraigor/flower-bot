@@ -28,16 +28,16 @@ class Motive(models.Model):
         verbose_name_plural = "Поводы"
 
 
-class EstimatedCost(models.Model):
+class Budget(models.Model):
     title = models.CharField("Название", max_length=200)
-    value = models.FloatField("Рассчетная сумма")
+    value = models.FloatField("Сумма")
 
     def __str__(self) -> str:
         return self.title
 
     class Meta:
-        verbose_name = "Рассчетная сумма"
-        verbose_name_plural = "Рассчетные суммы"
+        verbose_name = "Бюджет"
+        verbose_name_plural = "Бюджеты"
 
 
 class BunchElement(models.Model):
