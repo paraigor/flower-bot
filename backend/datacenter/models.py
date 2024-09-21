@@ -30,7 +30,8 @@ class Motive(models.Model):
 
 class Budget(models.Model):
     title = models.CharField("Название", max_length=200)
-    value = models.FloatField("Сумма")
+    value_from = models.FloatField("Сумма от")
+    value_to = models.FloatField("Сумма до")
 
     def __str__(self) -> str:
         return self.title

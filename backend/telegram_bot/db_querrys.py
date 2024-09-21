@@ -28,3 +28,11 @@ def create_client(id, first_name, last_name, username=None, phone_number=None):
 def get_motives():
     return Motive.objects.all()
 
+
+def get_budgets():
+    return Budget.objects.all()
+
+
+def get_default_motive_id():
+    motives = Motive.objects.filter(title="Без повода")
+    return motives[0].id
