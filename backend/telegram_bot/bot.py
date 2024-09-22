@@ -21,9 +21,12 @@ from .db_querrys import (
     check_client,
     create_client,
     get_budgets,
+    get_bunch,
+    get_bunch_elements,
     get_default_motive_id,
     get_motives,
 )
+from .order import handlers_register as make_order
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -132,7 +135,7 @@ def request_budget(update: Update, context: CallbackContext):
     buttons = [
         InlineKeyboardButton(
             budget.title,
-            callback_data=f"price_lt_{budget.value}",
+            callback_data=f"budget_id_{budget.id}",
         )
         for budget in budgets
     ]
@@ -154,47 +157,58 @@ def request_budget(update: Update, context: CallbackContext):
 def show_bunch(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
-    context.user_data["budget"] = query.data.split("_")[-1]
+    context.user_data["budget_id"] = query.data.split("_")[-1]
     motive = context.user_data["motive"]
     if motive.startswith("motive_id_"):
         context.user_data["motive_id"] = motive.replace("motive_id_", "")
     else:
         context.user_data["motive_id"] = get_default_motive_id()
-    breakpoint()
 
     bunch = get_bunch(
-        context.user_data["budget"], context.user_data["motive_id"]
+        context.user_data["budget_id"], context.user_data["motive_id"]
     )
 
     chat_id = query.message.chat_id
     message_id = query.message.message_id
     context.bot.delete_message(chat_id=chat_id, message_id=message_id)
-    image_url = f"{settings.SITE_URL}{cake.image.url}"
-    caption = f"""Торт {cake.title}
-        Количество уровней: {cake.level.title}
-        Форма: {cake.form.title}
-        Топинг: {cake.topping.title}
-        Ягода: {cake.berry.title}
-        Декор: {cake.decor.title}
+    image_url = bunch.image.name
+    bunch_elements = ""
+    for element in get_bunch_elements(bunch):
+        bunch_elements += f"{element.element.title} - {element.quantity} шт\n"
 
-        Цена: {cake.price} рублей
-        """
-    context.user_data["cake_for_order"] = cake
-    keyboard = [
-        [InlineKeyboardButton("Заказать", callback_data="get_data_for_cake")],
-        [
-            InlineKeyboardButton(
-                "Назад",
-                callback_data="unshow_cake",
-            ),
-        ],
+    caption = f"""{bunch.caption}\nСостав:\n{bunch_elements}\nЦена: {bunch.price} рублей"""
+    context.user_data["bunch_for_order"] = bunch
+    button = [
+        [InlineKeyboardButton("Заказать букет", callback_data="order_bunch")],
     ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+
     context.bot.send_photo(
         chat_id=chat_id,
         photo=image_url,
         caption=caption,
-        reply_markup=reply_markup,
+        reply_markup=InlineKeyboardMarkup(button),
+    )
+
+    next_message = """
+    *Хотите что\-то еще более уникальное\?\n Подберите другой букет из нашей коллекции или закажите консультацию флориста\.*
+    """
+    next_buttons = [
+        [
+            InlineKeyboardButton(
+                "Посмотреть всю коллекцию", callback_data="show_collection"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "Заказать консультацию", callback_data="request_consultation"
+            )
+        ],
+    ]
+    context.bot.send_message(
+        text=next_message,
+        chat_id=chat_id,
+        parse_mode=ParseMode.MARKDOWN_V2,
+        reply_markup=InlineKeyboardMarkup(next_buttons),
     )
 
 
@@ -217,7 +231,8 @@ def main():
         MessageHandler(Filters.text & ~Filters.command, request_budget)
     )
     updater.dispatcher.add_handler(
-        CallbackQueryHandler(show_bunch, pattern="^price_lt_")
+        CallbackQueryHandler(show_bunch, pattern="^budget_id_")
     )
+    updater.dispatcher = make_order(updater)
     updater.start_polling()
     updater.idle()

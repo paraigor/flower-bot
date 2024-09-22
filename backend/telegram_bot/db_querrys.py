@@ -36,3 +36,17 @@ def get_budgets():
 def get_default_motive_id():
     motives = Motive.objects.filter(title="Без повода")
     return motives[0].id
+
+
+def get_bunch(budget_id, motive_id):
+    budget = Budget.objects.get(id=budget_id)
+    bunches = Bunch.objects.filter(
+        motive__id=motive_id,
+        price__gt=budget.value_from,
+        price__lt=budget.value_to,
+    )
+    return bunches[0]
+
+
+def get_bunch_elements(bunch):
+    return BunchAssembly.objects.filter(bunch=bunch)
