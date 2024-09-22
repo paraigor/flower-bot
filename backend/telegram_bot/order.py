@@ -104,10 +104,13 @@ def show_delivery_time(update: Update, context: CallbackContext):
     current_date = dt.datetime.now()
     delivery_date = f"{current_date.year}-{delivery_date}"
     delivery_date = dt.datetime.strptime(delivery_date, "%Y-%m-%d")
-    day_diff = (delivery_date - current_date).total_seconds() / 86400
+    day_diff = (delivery_date - current_date).total_seconds() / 43200
     current_hour = current_date.hour
     current_minute = current_date.minute
-    if WORKDAY_START <= current_hour < WORKDAY_END and day_diff <= 1:
+    if (
+        WORKDAY_START <= current_hour < WORKDAY_END
+        and -1.583 <= day_diff <= -0.67
+    ):
         if current_minute:
             start_hour = current_hour + 1
         else:
@@ -241,15 +244,11 @@ def handlers_register(updater: Updater):
     updater.dispatcher.add_handler(
         ConversationHandler(
             entry_points=[
-                CallbackQueryHandler(
-                    order_start, pattern="^order_start$"
-                )
+                CallbackQueryHandler(order_start, pattern="^order_start$")
             ],
             states={
                 "NAME": [
-                    MessageHandler(
-                        Filters.text & ~Filters.command, get_name
-                    ),
+                    MessageHandler(Filters.text & ~Filters.command, get_name),
                 ],
                 "DELIVERY_ADDRESS": [
                     MessageHandler(
