@@ -18,6 +18,7 @@ from telegram.ext import (
 )
 
 from .common_functions import build_button_table
+from .consultation import handlers_register as consultation
 from .db_querrys import (
     check_client,
     create_client,
@@ -43,11 +44,11 @@ def prestart_PD_request(update: Update, context: CallbackContext):
     context.user_data["user_initial"] = update.message.from_user
     button = [[InlineKeyboardButton("Согласен", callback_data="reg_user")]]
     welcome_message = f"""
-    Добро пожаловать в бота магазина цветов\!
+Добро пожаловать в бота магазина цветов\!
 
-    Для продолжения работы с ботом нам потребуется Ваше согласие на обработку персональных данных\.
-    С документом Вы можете ознакомиться [по ссылке]({URL_AGREEMENT})\.
-    Нажимая "Согласен" \- Вы даёте своё согласие и можете продолжать пользоваться ботом\.
+Для продолжения работы с ботом нам потребуется Ваше согласие на обработку персональных данных\.
+С документом Вы можете ознакомиться [по ссылке]({URL_AGREEMENT})\.
+Нажимая "Согласен" \- Вы даёте своё согласие и можете продолжать пользоваться ботом\.
     """
     update.message.reply_text(
         welcome_message,
@@ -98,11 +99,11 @@ def start(update: Update, context: CallbackContext):
     )
 
     start_message = """
-    Добро пожаловать в бота магазина цветов\!
+Добро пожаловать в бота магазина цветов\!
 
-    Закажите доставку праздничного букета, собранного специально для ваших любимых, родных и коллег\. Наш букет со смыслом станет главным подарком на вашем празднике\.
+Закажите доставку праздничного букета, собранного специально для ваших любимых, родных и коллег\. Наш букет со смыслом станет главным подарком на вашем празднике\.
 
-    *К какому событию готовимся\? Выберите один из вариантов\.*
+*К какому событию готовимся\? Выберите один из вариантов\.*
     """
 
     if query:
@@ -191,7 +192,8 @@ def show_bunch(update: Update, context: CallbackContext):
     )
 
     next_message = """
-    *Хотите что\-то еще более уникальное\?\n Подберите другой букет из нашей коллекции или закажите консультацию флориста\.*
+*Хотите что\-то еще более уникальное\?\n Подберите другой букет из нашей \
+коллекции или закажите консультацию флориста\.*
     """
     next_buttons = [
         [
@@ -232,6 +234,7 @@ def main():
         CallbackQueryHandler(show_bunch, pattern="^budget_id_")
     )
     updater.dispatcher = make_order(updater)
+    updater.dispatcher = consultation(updater)
     updater.dispatcher.add_handler(
         MessageHandler(Filters.text & ~Filters.command, request_budget),
     )

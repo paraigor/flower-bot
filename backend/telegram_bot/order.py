@@ -216,33 +216,7 @@ def make_order(update: Update, context: CallbackContext):
         delivery_address,
         delivery_comment,
     )
-    # send_order(update, context, order)
     order_end(update, context)
-
-
-# def send_order(update, context, order):
-#     context.bot.send_message(
-#         chat_id=admin_chat_id,
-#         text=f"""
-# Заказ №{order.id}:
-# Торт: {order.cake.title or 'сборный'}
-# Уровни: {order.cake.level.title}
-# Форма: {order.cake.form.title}
-# Топпинг: {order.cake.topping.title}
-# Ягода: {order.cake.berry and order.cake.berry.title or '-'}
-# Декор: {order.cake.decor and order.cake.decor.title or '-'}
-# Надпись: {order.cake.caption or '-'}
-
-# Цена: {order.invoice.amount}
-
-# Доставка:
-# {order.delivery_date} в {order.delivery_time}
-# Адрес: {order.delivery_address}
-# Комментарий: {order.comment}
-
-# Номер телефона:
-# {order.client.phone_number}""",
-#     )
 
 
 def order_end(update: Update, context: CallbackContext):
