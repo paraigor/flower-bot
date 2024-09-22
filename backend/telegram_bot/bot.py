@@ -17,6 +17,7 @@ from telegram.ext import (
     Updater,
 )
 
+from .collection import handlers_register as collection
 from .common_functions import build_button_table
 from .consultation import handlers_register as consultation
 from .db_querrys import (
@@ -178,7 +179,13 @@ def show_bunch(update: Update, context: CallbackContext):
     for element in get_bunch_elements(bunch):
         bunch_elements += f"{element.element.title} - {element.quantity} шт\n"
 
-    caption = f"""{bunch.caption}\nСостав:\n{bunch_elements}\nЦена: {bunch.price} рублей"""
+    caption = f"""
+{bunch.caption}
+
+Состав:
+{bunch_elements}
+Цена: {bunch.price} рублей
+    """
     context.user_data["bunch_for_order"] = bunch
     button = [
         [InlineKeyboardButton("Заказать букет", callback_data="order_start")],
@@ -235,6 +242,7 @@ def main():
     )
     updater.dispatcher = make_order(updater)
     updater.dispatcher = consultation(updater)
+    updater.dispatcher = collection(updater)
     updater.dispatcher.add_handler(
         MessageHandler(Filters.text & ~Filters.command, request_budget),
     )

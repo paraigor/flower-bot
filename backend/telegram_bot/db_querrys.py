@@ -4,7 +4,6 @@ from datacenter.models import (
     Budget,
     Bunch,
     BunchAssembly,
-    BunchElement,
     Client,
     Motive,
     Order,
@@ -33,18 +32,21 @@ def get_budgets():
 
 
 def get_default_motive_id():
-    motives = Motive.objects.filter(title="Без повода")
-    return motives[0].id
+    motive = Motive.objects.filter(title="Без повода").first()
+    return motive.id
 
 
 def get_bunch(budget_id, motive_id):
     budget = Budget.objects.get(id=budget_id)
-    bunches = Bunch.objects.filter(
+    return Bunch.objects.filter(
         motive__id=motive_id,
         price__gt=budget.value_from,
         price__lt=budget.value_to,
-    )
-    return bunches[0]
+    ).first()
+
+
+def get_random_bunch():
+    return Bunch.objects.all().order_by("?").first()
 
 
 def get_bunch_elements(bunch):
