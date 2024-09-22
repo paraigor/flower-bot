@@ -11,6 +11,27 @@ from datacenter.models import (
 )
 
 
+IMAGE = [
+    "https://krasnodarflora.ru/upload/iblock/ce2/uisicyfvbd33mq75upcb3glng544bykc.jpg",
+    "https://krasnodarflora.ru/upload/iblock/c5b/z1s3yybxx8wukdjevpqdklxgibjgwyip.jpg",
+    "https://krasnodarflora.ru/upload/iblock/6ed/9f6rgjx59afh2hhwszj7xffkb6ug5xo3.jpg",
+    "https://krasnodarflora.ru/upload/iblock/680/6801e2c7d92a51490eb9c1a1f4b26e8f.jpg",
+    "https://krasnodarflora.ru/upload/iblock/85f/88drtlyxzdxvlterlrxk0u0e23n8ibid.jpg",
+    "https://krasnodarflora.ru/upload/iblock/967/qbs0wbtizlbfenw4al6zmihum2yxvm5o.jpg",
+    "https://krasnodarflora.ru/upload/iblock/680/6801e2c7d92a51490eb9c1a1f4b26e8f.jpg",
+    "https://krasnodarflora.ru/upload/iblock/c5b/z1s3yybxx8wukdjevpqdklxgibjgwyip.jpg",
+    ]
+DESCRIPTION = [
+    "Окутайте ее лавиной восторга! Этот великолепный букет - это больше, чем просто подарок - это захватывающее дух проявление любви, которое обещает оставить неизгладимое впечатление.",
+    "Добавьте нотку изысканности в ваш день с этим букетом!",
+    "Букет в нежных тонах с гортензиями и альстромериями.",
+    "Яркий и контрастный букет из тюльпанов",
+    "Большой букет из розовых лилий и ирисов",
+    "Яркий контрастный букет из белых роз, сиреневых ирисов и танацетума",
+    "Яркий и контрастный букет из тюльпанов",
+    "Добавьте нотку изысканности в ваш день с этим букетом!",
+]
+
 STATUS = ["accepted", "confirmed"]
 ADDRESSES = [
         "Москва, Тверская, 21, кв. 23",
@@ -54,7 +75,7 @@ def create_occasions():
         "8 марта",
         "23 февраля",
         "14 февраля",
-        "Другой повод",
+        "Нет повода",
     ]
 
     for occasion in occasions:
@@ -99,83 +120,35 @@ def create_budget():
 
 # Создание Букетов
 def create_bouquets():
-    bouquets = {
-        0: {
-            "title": "Sarah Bernardt",
-            "price": randint(250, 1499),
-            "image": "https://krasnodarflora.ru/upload/iblock/ce2/uisicyfvbd33mq75upcb3glng544bykc.jpg",
-            "description": "Окутайте ее лавиной восторга! Этот великолепный букет - это больше, чем просто подарок - это захватывающее дух проявление любви, которое обещает оставить неизгладимое впечатление.",
-        },
-        1: {
-            "title": "Букет из 25 гортензии",
-            "price": randint(1500, 2999),
-            "image": "https://krasnodarflora.ru/upload/iblock/c5b/z1s3yybxx8wukdjevpqdklxgibjgwyip.jpg",
-            "description": "Добавьте нотку изысканности в ваш день с этим букетом!",
-        },
-        2: {
-            "title": 'Букет "Гортензии и Альстромерии"',
-            "price": randint(3000, 4999),
-            "image": "https://krasnodarflora.ru/upload/iblock/6ed/9f6rgjx59afh2hhwszj7xffkb6ug5xo3.jpg",
-            "description": "Букет в нежных тонах с гортензиями и альстромериями.",
-        },
-        3: {
-            "title": 'Букет из 51 тюльпана "Солнце и Небо"',
-            "price": randint(5000, 10000),
-            "image": "https://krasnodarflora.ru/upload/iblock/680/6801e2c7d92a51490eb9c1a1f4b26e8f.jpg",
-            "description": "Яркий и контрастный букет из 51 тюльпана",
-        },
-        4: {
-            "title": "Букет из 10 лилий и 15 ирисов",
-            "price": randint(250, 2999),
-            "image": "https://krasnodarflora.ru/upload/iblock/85f/88drtlyxzdxvlterlrxk0u0e23n8ibid.jpg",
-            "description": "Большой букет из 10 розовых лилий и 15 ирисов",
-        },
-        5: {
-            "title": "Букет из белых роз, ирисов и ромашек",
-            "price": randint(250, 2999),
-            "image": "https://krasnodarflora.ru/upload/iblock/967/qbs0wbtizlbfenw4al6zmihum2yxvm5o.jpg",
-            "description": "Яркий контрастный букет из 21 белой розы, 14 сиреневых ирисов и танацетума",
-        },
-        6: {
-            "title": 'Букет из 31 тюльпана "Солнце и Небо"',
-            "price": randint(3000, 10000),
-            "image": "https://krasnodarflora.ru/upload/iblock/680/6801e2c7d92a51490eb9c1a1f4b26e8f.jpg",
-            "description": "Яркий и контрастный букет из 31 тюльпана",
-        },
-        7: {
-            "title": "Букет из 15 гортензии",
-            "price": randint(3000, 10000),
-            "image": "https://krasnodarflora.ru/upload/iblock/c5b/z1s3yybxx8wukdjevpqdklxgibjgwyip.jpg",
-            "description": "Добавьте нотку изысканности в ваш день с этим букетом!",
-        },
+    cost = {
+        0: randint(250, 1499),
+        1: randint(1500, 2999),
+        2: randint(3000, 4999),
+        3: randint(5000, 10000),
     }
-
     bunch_elements = list(BunchElement.objects.all())
-    motives = list(Motive.objects.all())
+    motives = Motive.objects.all()
 
-    for bouquet in bouquets.values():
-        title = bouquet["title"]
-        price = bouquet["price"]
-        image = bouquet["image"]
-        description = bouquet["description"]
-        motives = [choice(motives) for _ in range(3)]
-        elements = [choice(bunch_elements) for _ in range(2)]
+    for motive in motives:
+        for i in range(4):
+            elements = [choice(bunch_elements) for _ in range(2)]
+            title = f'Букет из {elements[0]} и {elements[1]}'
+            price = cost[i]
+            image = choice(IMAGE)
+            description = choice(DESCRIPTION)
 
-        bunch = Bunch(
-            title=title, price=price, image=image, caption=description
-        )
-
-        bunch.save()
-        
-        quantity = [num for num in range(1, 102, 2)]
-        for element in elements:
-            bunch_assembly = BunchAssembly(
-            bunch=bunch, element=element, quantity=choice(quantity)
-        )
-            bunch_assembly.save()
+            bunch = Bunch(
+                title=title, price=price, image=image, caption=description
+            )
+            bunch.save()
+            bunch.motive.add(motive)
             
-        bunch.motive.set(motives)
-        bunch.elements.set(elements)
+            quantity = [num for num in range(1, 102, 2)]
+            for element in elements:
+                bunch_assembly = BunchAssembly(
+                bunch=bunch, element=element, quantity=choice(quantity)
+            )
+                bunch_assembly.save()
 
 
 # Создание Заказов
