@@ -36,7 +36,8 @@ BOT_TOKEN = env.str("BOT_TOKEN")
 CSRF_TRUSTED_ORIGINS = env.list("CROSS_OR")
 CORS_ORIGIN_WHITELIST = env.list("CROSS_OR")
 
-ADMIN_ID = env.str("ADMIN_ID")
+COURIER_ID = env.str("COURIER_ID")
+FLORIST_ID = env.str("FLORIST_ID")
 SITE_URL = env.str("SITE_URL")
 
 

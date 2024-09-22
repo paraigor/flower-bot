@@ -75,7 +75,7 @@ def create_occasions():
         "8 марта",
         "23 февраля",
         "14 февраля",
-        "Нет повода",
+        "Без повода",
     ]
 
     for occasion in occasions:

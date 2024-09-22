@@ -11,6 +11,7 @@ from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
     CommandHandler,
+    ConversationHandler,
     Filters,
     MessageHandler,
     Updater,
@@ -179,7 +180,7 @@ def show_bunch(update: Update, context: CallbackContext):
     caption = f"""{bunch.caption}\nСостав:\n{bunch_elements}\nЦена: {bunch.price} рублей"""
     context.user_data["bunch_for_order"] = bunch
     button = [
-        [InlineKeyboardButton("Заказать букет", callback_data="order_bunch")],
+        [InlineKeyboardButton("Заказать букет", callback_data="order_start")],
     ]
 
     context.bot.send_photo(
@@ -225,14 +226,14 @@ def main():
         CallbackQueryHandler(request_budget, pattern="^motive_id_")
     )
     updater.dispatcher.add_handler(
-        CallbackQueryHandler(request_custom_motive, pattern="^custom_motive$")
-    )
-    updater.dispatcher.add_handler(
-        MessageHandler(Filters.text & ~Filters.command, request_budget)
+        CallbackQueryHandler(request_custom_motive, pattern="^custom_motive$"),
     )
     updater.dispatcher.add_handler(
         CallbackQueryHandler(show_bunch, pattern="^budget_id_")
     )
     updater.dispatcher = make_order(updater)
+    updater.dispatcher.add_handler(
+        MessageHandler(Filters.text & ~Filters.command, request_budget),
+    )
     updater.start_polling()
     updater.idle()

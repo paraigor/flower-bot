@@ -1,5 +1,4 @@
 import datetime as dt
-import random
 
 from datacenter.models import (
     Budget,
@@ -50,3 +49,33 @@ def get_bunch(budget_id, motive_id):
 
 def get_bunch_elements(bunch):
     return BunchAssembly.objects.filter(bunch=bunch)
+
+
+def check_and_add_phone_number(id, phone_num):
+    if not Client.objects.filter(id_tg=id, phone_number=phone_num).exists():
+        client = Client.objects.get(id_tg=id)
+        client.phone_number = phone_num
+        client.save()
+
+
+def get_client(id):
+    return Client.objects.get(id_tg__exact=id)
+
+
+def create_order(
+    client,
+    bunch,
+    delivery_date,
+    delivery_time,
+    delivery_address,
+    comment,
+):
+    order = Order.objects.create(
+        client=client,
+        bunch=bunch,
+        delivery_date=dt.datetime.strptime(delivery_date, "%Y-%m-%d").date(),
+        delivery_time=dt.datetime.strptime(delivery_time, "%H").time(),
+        delivery_address=delivery_address,
+        comment=comment,
+    )
+    return order

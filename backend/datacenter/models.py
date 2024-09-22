@@ -117,6 +117,13 @@ class Order(models.Model):
     delivery_address = models.TextField(
         verbose_name="Адрес доставки", max_length=200, null=True, blank=True
     )
+    comment = models.CharField(
+        "Комментарий для курьера",
+        max_length=200,
+        null=True,
+        blank=True,
+    )
+
 
     def __str__(self) -> str:
         return f"{self.status} {self.date} {self.client.full_name}"
