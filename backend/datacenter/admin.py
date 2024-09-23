@@ -1,24 +1,8 @@
 from django.contrib import admin
 
+from .send_order_courier import send_order
 from .models import Budget, Bunch, BunchElement, Client, Motive, Order
 
-# def send_order():
-#     bot.send_message(
-#         chat_id=settings.COURIER_ID,
-#         text=f"""
-# Заказ №{order.id}:
-# Букет: {order.bunch.title}
-
-# Цена: {order.bunch.price}
-
-# Доставка:
-# {order.delivery_date} в {order.delivery_time}
-# Адрес: {order.delivery_address}
-# Комментарий: {order.comment}
-
-# Номер телефона:
-# {order.client.phone_number}""",
-#     )
 
 class BunchElementInline(admin.TabularInline):
     model = Bunch.elements.through
@@ -30,8 +14,21 @@ class BunchAdmin(admin.ModelAdmin):
     inlines = [BunchElementInline]
 
 
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['status', 'date', 'client']
+    actions = ['send_courier']
+
+    @admin.action(description='Отправить курьеру')
+    def send_courier(self, requests, queryset):
+        for object in queryset:
+            object.status = 'confirmed'
+            object.save()
+            send_order(object)
+
+
 admin.site.register(BunchElement)
 admin.site.register(Budget)
 admin.site.register(Client)
 admin.site.register(Motive)
-admin.site.register(Order)
+
